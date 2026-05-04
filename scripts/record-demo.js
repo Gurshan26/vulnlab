@@ -6,96 +6,69 @@ const BASE = process.env.DEMO_URL || 'http://localhost:3000';
 const OUT = path.join(__dirname, '..', 'docs', 'screenshots');
 const WAIT = (ms) => new Promise((r) => setTimeout(r, ms));
 
+const LABS = [
+  { slug: 'xss-reflected', label: 'Reflected XSS' },
+  { slug: 'xss-stored', label: 'Stored XSS' },
+  { slug: 'sqli', label: 'SQL Injection' },
+  { slug: 'csrf', label: 'CSRF' },
+  { slug: 'broken-auth', label: 'Broken Auth' },
+  { slug: 'idor', label: 'IDOR' }
+];
+
 async function shot(page, name, label) {
-  await page.screenshot({ path: path.join(OUT, `${name}.png`), fullPage: false });
+  const outputPath = path.join(OUT, `${name}.png`);
+  await page.screenshot({ path: outputPath, fullPage: true });
   console.log(`✓ ${label}`);
 }
 
+async function goLab(page, slug) {
+  await page.goto(`${BASE}/lab/${slug}`, { waitUntil: 'networkidle2' });
+  await WAIT(700);
+}
+
+async function captureLabDiffShots(page, slug, label, indexStart) {
+  await goLab(page, slug);
+
+  // vulnerable diff state
+  await page.waitForSelector('[data-mode="vulnerable"]');
+  await shot(page, `${String(indexStart).padStart(2, '0')}-${slug}-vuln-diff`, `${label} vulnerable diff`);
+
+  // patched diff state
+  await page.click('[data-mode="patched"]');
+  await WAIT(500);
+  await shot(page, `${String(indexStart + 1).padStart(2, '0')}-${slug}-patched-diff`, `${label} patched diff`);
+}
+
 async function main() {
+  fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 1400, height: 900 } });
-  const page = await browser.newPage();
 
-  await page.goto(BASE);
-  await WAIT(1500);
-  await shot(page, '01-home', 'Home — lab selector');
-
-  await page.goto(`${BASE}/lab/xss-reflected`);
-  await WAIT(1500);
-  await shot(page, '02-xss-reflected-vuln', 'XSS Reflected — Vulnerable mode');
-
-  await page.type('[data-testid="search-input"]', '<img src=x onerror="alert(\'XSS\')">');
-  page.once('dialog', async (dialog) => {
-    console.log('Alert fired:', dialog.message());
-    await dialog.dismiss();
+  const browser = await puppeteer.launch({
+    headless: true,
+    defaultViewport: { width: 1600, height: 1000 },
+    args: ['--no-sandbox']
   });
-  await page.click('[data-action="search"]');
-  await WAIT(1000);
-  await shot(page, '03-xss-attack-fired', 'XSS alert executed — attack successful');
 
-  await page.click('[data-mode="patched"]');
-  await WAIT(600);
-  await page.click('[data-action="search"]');
-  await WAIT(800);
-  await shot(page, '04-xss-blocked', 'Same payload blocked in patched mode');
+  const page = await browser.newPage();
+  page.on('dialog', async (dialog) => {
+    try {
+      await dialog.dismiss();
+    } catch {
+      // ignore
+    }
+  });
 
-  await page.click('[data-testid="show-diff"]');
-  await WAIT(500);
-  await shot(page, '05-code-diff', 'Code diff opened');
-
-  await page.goto(`${BASE}/lab/sqli`);
-  await WAIT(1200);
-  await page.type('[data-field="username"]', "admin' --");
-  await page.type('[data-field="password"]', 'anything');
-  await page.click('[data-action="login"]');
-  await WAIT(900);
-  await shot(page, '06-sqli-vuln', 'SQLi works in vulnerable mode');
-
-  await page.click('[data-mode="patched"]');
-  await WAIT(500);
-  await page.click('[data-action="login"]');
-  await WAIT(900);
-  await shot(page, '07-sqli-patched', 'SQLi blocked in patched mode');
-
-  await page.goto(`${BASE}/lab/csrf`);
-  await WAIT(1000);
-  await shot(page, '08-csrf', 'CSRF lab');
-
-  await page.goto(`${BASE}/lab/xss-stored`);
-  await WAIT(1000);
-  await shot(page, '09-xss-stored', 'Stored XSS lab');
-
-  await page.goto(`${BASE}/lab/broken-auth`);
-  await WAIT(1000);
-  await shot(page, '10-auth', 'Broken auth lab');
-
-  await page.goto(`${BASE}/lab/idor`);
-  await WAIT(1000);
-  await shot(page, '11-idor', 'IDOR lab');
-
-  await page.goto(`${BASE}/lab/xss-reflected`);
+  await page.goto(BASE, { waitUntil: 'networkidle2' });
   await WAIT(700);
-  await shot(page, '12-reflected-return', 'Back to reflected XSS');
+  await shot(page, '01-home-overview', 'Home overview');
 
-  await page.goto(`${BASE}/lab/sqli`);
-  await WAIT(700);
-  await shot(page, '13-sqli-return', 'Back to SQLi');
+  let counter = 2;
+  for (const lab of LABS) {
+    await captureLabDiffShots(page, lab.slug, lab.label, counter);
+    counter += 2;
+  }
 
-  await page.goto(BASE);
-  await WAIT(700);
-  await shot(page, '14-home-end', 'Home end frame');
-
-  console.log(`\n${fs.readdirSync(OUT).length} screenshots saved to docs/screenshots/`);
-  console.log('--- VIDEO DEMO SCRIPT ---');
-  console.log('0:00 show home and lab list');
-  console.log('0:20 reflected XSS works in vulnerable mode');
-  console.log('0:45 same payload blocked in patched mode');
-  console.log('1:10 show diff innerHTML -> textContent');
-  console.log('1:30 SQLi admin\' -- bypass works');
-  console.log('1:50 SQLi blocked in patched mode');
-  console.log('2:10 quick run through CSRF/Auth/IDOR');
-  console.log('2:45 end on tests + build passing');
-
+  console.log(`\n${fs.readdirSync(OUT).filter((f) => f.endsWith('.png')).length} screenshots saved to docs/screenshots/`);
   await browser.close();
 }
 
