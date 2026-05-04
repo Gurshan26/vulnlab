@@ -1,0 +1,104 @@
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.copy {
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.input {
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  padding: 8px;
+  width: 100%;
+}
+
+.button {
+  border: none;
+  border-radius: var(--r-sm);
+  background: var(--mode-primary);
+  color: white;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.frame {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: white;
+  height: 100px;
+}
+
+.resultBox {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  background: var(--surface-2);
+  min-height: 44px;
+}
+
+.comments {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.commentsFrame {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  height: 220px;
+  width: 100%;
+}
+
+.commentRow {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  font-size: 13px;
+}
+
+.table {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  overflow: auto;
+}
+
+.output {
+  font-size: 12px;
+  color: var(--ink-2);
+}

@@ -1,0 +1,29 @@
+.toggle {
+  display: inline-flex;
+  gap: 6px;
+  border: 1px solid var(--mode-border);
+  border-radius: 999px;
+  padding: 4px;
+  background: var(--surface);
+}
+
+.option {
+  border: none;
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activeVuln {
+  background: var(--vuln-primary);
+  color: white;
+}
+
+.activePatch {
+  background: var(--patch-primary);
+  color: white;
+}

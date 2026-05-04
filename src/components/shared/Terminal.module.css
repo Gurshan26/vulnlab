@@ -1,0 +1,9 @@
+.terminal {
+  margin: 0;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  min-height: 74px;
+  white-space: pre-wrap;
+}

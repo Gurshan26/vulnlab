@@ -1,0 +1,34 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--r-md);
+  padding: 12px;
+}
+
+.card:hover {
+  border-color: var(--mode-border);
+}
+
+.active {
+  border-left: 4px solid var(--mode-primary);
+  background: var(--mode-bg);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.top h3 {
+  font-size: 14px;
+}
+
+.subtitle {
+  color: var(--ink-2);
+  font-size: 12px;
+}

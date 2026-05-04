@@ -1,0 +1,173 @@
+.main {
+  min-height: 100vh;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mode-primary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.lead {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-2);
+  max-width: 880px;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.panel p {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.panel ol {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-2);
+  display: grid;
+  gap: 4px;
+}
+
+.note {
+  font-size: 12px;
+}
+
+.termGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.termCard {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.termCard h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.termCard p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.termShort {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.labHeading {
+  margin: 6px 0 8px;
+  font-size: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card:hover {
+  border-color: var(--mode-border);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.row h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--ink-2);
+}
+
+.cta {
+  color: var(--mode-primary);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+@media (max-width: 1080px) {
+  .termGrid,
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    padding: 16px;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+  }
+
+  .termGrid,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
